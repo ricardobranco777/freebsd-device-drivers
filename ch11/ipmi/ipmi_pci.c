@@ -177,7 +177,7 @@ static driver_t ipmi_pci_driver = {
 	sizeof(struct ipmi_softc)
 };
 
-DRIVER_MODULE(ipmi_pci, pci, ipmi_pci_driver, ipmi_devclass, 0, 0);
+DRIVER_MODULE(ipmi_pci, pci, ipmi_pci_driver, 0, 0);
 
 
 static int
@@ -283,4 +283,4 @@ static driver_t ipmi2_pci_driver = {
 	sizeof(struct ipmi_softc)
 };
 
-DRIVER_MODULE(ipmi2_pci, pci, ipmi2_pci_driver, ipmi_devclass, 0, 0);
+DRIVER_MODULE(ipmi2_pci, pci, ipmi2_pci_driver, 0, 0);
