@@ -150,8 +150,6 @@ static struct cdevsw lpt_cdevsw = {
 	.d_name =		LPT_NAME
 };
 
-static devclass_t lpt_devclass;
-
 static void
 lpt_identify(driver_t *driver, device_t parent)
 {
@@ -787,5 +785,5 @@ static driver_t lpt_driver = {
 	sizeof(struct lpt_data)
 };
 
-DRIVER_MODULE(lpt, ppbus, lpt_driver, lpt_devclass, 0, 0);
+DRIVER_MODULE(lpt, ppbus, lpt_driver, 0, 0);
 MODULE_DEPEND(lpt, ppbus, 1, 1, 1);
