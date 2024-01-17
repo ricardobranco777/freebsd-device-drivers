@@ -40,8 +40,6 @@ struct led_softc {
 	struct mtx		sc_mutex;
 };
 
-static devclass_t led_devclass;
-
 static d_open_t			led_open;
 static d_close_t		led_close;
 static d_read_t			led_read;
@@ -230,4 +228,4 @@ static driver_t led_driver = {
 	sizeof(struct led_softc)
 };
 
-DRIVER_MODULE(led, isa, led_driver, led_devclass, 0, 0);
+DRIVER_MODULE(led, isa, led_driver, 0, 0);
