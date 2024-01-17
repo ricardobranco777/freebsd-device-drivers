@@ -76,8 +76,6 @@ static struct cdevsw pint_cdevsw = {
 	.d_name =		PINT_NAME
 };
 
-static devclass_t pint_devclass;
-
 static int
 pint_open(struct cdev *dev, int oflags, int devtype, struct thread *td)
 {
@@ -278,5 +276,5 @@ static driver_t pint_driver = {
 	sizeof(struct pint_data)
 };
 
-DRIVER_MODULE(pint, ppbus, pint_driver, pint_devclass, 0, 0);
+DRIVER_MODULE(pint, ppbus, pint_driver, 0, 0);
 MODULE_DEPEND(pint, ppbus, 1, 1, 1);
