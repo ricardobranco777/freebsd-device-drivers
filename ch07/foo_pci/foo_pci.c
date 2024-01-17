@@ -60,8 +60,6 @@ static struct cdevsw foo_pci_cdevsw = {
 	.d_name =	"foo_pci"
 };
 
-static devclass_t foo_pci_devclass;
-
 static int
 foo_pci_open(struct cdev *dev, int oflags, int devtype, struct thread *td)
 {
@@ -88,7 +86,7 @@ foo_pci_read(struct cdev *dev, struct uio *uio, int ioflag)
 	struct foo_pci_softc *sc;
 
 	sc = dev->si_drv1;
-	device_printf(sc->device, "read request = %dB\n", uio->uio_resid);
+	device_printf(sc->device, "read request = %zdB\n", uio->uio_resid);
 	return (0);
 }
 
@@ -98,7 +96,7 @@ foo_pci_write(struct cdev *dev, struct uio *uio, int ioflag)
 	struct foo_pci_softc *sc;
 
 	sc = dev->si_drv1;
-	device_printf(sc->device, "write request = %dB\n", uio->uio_resid);
+	device_printf(sc->device, "write request = %zdB\n", uio->uio_resid);
 	return (0);
 }
 
@@ -164,4 +162,4 @@ static driver_t foo_pci_driver = {
 	sizeof(struct foo_pci_softc)
 };
 
-DRIVER_MODULE(foo_pci, pci, foo_pci_driver, foo_pci_devclass, 0, 0);
+DRIVER_MODULE(foo_pci, pci, foo_pci_driver, 0, 0);
