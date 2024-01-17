@@ -560,8 +560,6 @@ static driver_t ulpt_driver = {
 	sizeof(struct ulpt_softc)
 };
 
-static devclass_t ulpt_devclass;
-
-DRIVER_MODULE(ulpt, uhub, ulpt_driver, ulpt_devclass, 0, 0);
+DRIVER_MODULE(ulpt, uhub, ulpt_driver, 0, 0);
 MODULE_DEPEND(ulpt, usb, 1, 1, 1);
 MODULE_DEPEND(ulpt, ucom, 1, 1, 1);
