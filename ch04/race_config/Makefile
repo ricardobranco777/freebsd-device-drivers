@@ -1,5 +1,5 @@
 PROG=	race_config
 SRCS=	race_config.c
-NO_MAN=
+MK_MAN=	no
 
 .include <bsd.prog.mk>

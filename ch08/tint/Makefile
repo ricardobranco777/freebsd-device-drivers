@@ -1,5 +1,5 @@
 PROG=	tint
 SRCS=	tint.c
-NO_MAN=
+MK_MAN=	no
 
 .include <bsd.prog.mk>
