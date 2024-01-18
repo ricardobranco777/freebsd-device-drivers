@@ -27,6 +27,7 @@
  */
 
 #include <sys/param.h>
+#include <sys/sysctl.h>
 #include <sys/module.h>
 #include <sys/kernel.h>
 #include <sys/systm.h>
@@ -40,6 +41,7 @@
 
 #include <cam/cam.h>
 #include <cam/cam_ccb.h>
+//#include <cam/cam_compat.h>
 #include <cam/cam_debug.h>
 #include <cam/cam_sim.h>
 #include <cam/cam_xpt_sim.h>
@@ -62,8 +64,6 @@ struct mfip {
 	struct cam_sim		*sim;
 	struct cam_path		*path;
 };
-
-static devclass_t		mfip_devclass;
 
 static void			mfip_action(struct cam_sim *, union ccb *);
 static void			mfip_poll(struct cam_sim *);
@@ -213,11 +213,7 @@ mfip_action(struct cam_sim *sim, union ccb *ccb)
 			break;
 		}
 		if ((ccb_h->flags & CAM_DIR_MASK) != CAM_DIR_NONE) {
-			if (ccb_h->flags & CAM_DATA_PHYS) {
-				ccb_h->status = CAM_REQ_INVALID;
-				break;
-			}
-			if (ccb_h->flags & CAM_SCATTER_VALID) {
+			if ((ccb_h->flags & CAM_DATA_MASK) != CAM_DATA_VADDR) {
 				ccb_h->status = CAM_REQ_INVALID;
 				break;
 			}
@@ -308,10 +304,8 @@ mfip_done(struct mfi_command *cm)
 	union ccb *ccb = cm->cm_private;
 	struct ccb_hdr *ccb_h = &ccb->ccb_h;
 	struct ccb_scsiio *csio = &ccb->csio;
-	struct mfip *sc;
 	struct mfi_pass_frame *pt;
 
-	sc = ccb_h->ccb_mfip_ptr;
 	pt = &cm->cm_frame->pass;
 
 	switch (pt->header.cmd_status) {
@@ -380,6 +374,6 @@ static driver_t mfip_driver = {
 	sizeof(struct mfip)
 };
 
-DRIVER_MODULE(mfip, mfi, mfip_driver, mfip_devclass, 0, 0);
+DRIVER_MODULE(mfip, mfi, mfip_driver, 0, 0);
 MODULE_DEPEND(mfip, cam, 1, 1, 1);
 MODULE_DEPEND(mfip, mfi, 1, 1, 1);
