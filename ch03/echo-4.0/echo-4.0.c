@@ -185,8 +185,7 @@ echo_modevent(module_t mod __unused, int event, void *arg __unused)
 		echo_message->buffer = malloc(echo_message->buffer_size,
 		    M_ECHO, M_WAITOK);
 		sysctl_ctx_init(&clist);
-		poid = SYSCTL_ADD_NODE(&clist,
-		    SYSCTL_STATIC_CHILDREN(/* tree top */), OID_AUTO,
+		poid = SYSCTL_ADD_ROOT_NODE(&clist, OID_AUTO,
 		    "echo", CTLFLAG_RW, 0, "echo root node");
 		SYSCTL_ADD_PROC(&clist, SYSCTL_CHILDREN(poid), OID_AUTO,
 		    "buffer_size", CTLTYPE_INT | CTLFLAG_RW,
