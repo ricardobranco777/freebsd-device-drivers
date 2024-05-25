@@ -35,7 +35,7 @@
 #include <sys/systm.h>
 #include <sys/sysctl.h>
 
-static long  a = 100;
+static int   a = 100;
 static int   b = 200;
 static char *c = "Are you suggesting coconuts migrate?";
 
@@ -58,15 +58,14 @@ pointless_modevent(module_t mod __unused, int event, void *arg __unused)
 	case MOD_LOAD:
 		sysctl_ctx_init(&clist);
 
-		poid = SYSCTL_ADD_NODE(&clist,
-		    SYSCTL_STATIC_CHILDREN(/* tree top */), OID_AUTO,
+		poid = SYSCTL_ADD_ROOT_NODE(&clist, OID_AUTO,
 		    "example", CTLFLAG_RW, 0, "new top-level tree");
 		if (poid == NULL) {
-			uprintf("SYSCTL_ADD_NODE failed.\n");
+			uprintf("SYSCTL_ADD_ROOT_NODE failed.\n");
 			return (EINVAL);
 		}
-		SYSCTL_ADD_LONG(&clist, SYSCTL_CHILDREN(poid), OID_AUTO,
-		    "long", CTLFLAG_RW, &a, "new long leaf");
+		SYSCTL_ADD_INT(&clist, SYSCTL_CHILDREN(poid), OID_AUTO,
+		    "long", CTLFLAG_RW, &a, 0, "new long leaf");
 		SYSCTL_ADD_INT(&clist, SYSCTL_CHILDREN(poid), OID_AUTO,
 		    "int", CTLFLAG_RW, &b, 0, "new int leaf");
 
@@ -78,7 +77,7 @@ pointless_modevent(module_t mod __unused, int event, void *arg __unused)
 			return (EINVAL);
 		}
 		SYSCTL_ADD_PROC(&clist, SYSCTL_CHILDREN(poid), OID_AUTO,
-		    "proc", CTLFLAG_RD, 0, 0, sysctl_pointless_procedure,
+		    "proc", CTLTYPE_STRING | CTLFLAG_RD, NULL, 0, sysctl_pointless_procedure,
 		    "A", "new proc leaf");
 
 		poid = SYSCTL_ADD_NODE(&clist,
